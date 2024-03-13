@@ -1,20 +1,28 @@
-const express = require('express')
-const { db } = require('./config/db')
-const dotenv = require('dotenv')
-const app = express()
-const port = 5000
-dotenv.config()
+const dotenv = require('dotenv');
+const express = require('express');
+const cors = require('cors');
+const { db } = require('./config/db');
+const app = express();
+app.use(express.json());
 
+const product = require('./routes/products.routes');
 
+dotenv.config();
 
-app.get("/",(req,resp) => {
-    resp.send("heyyyyyy response")
-})
+const PORT = 5000
 
-app.listen(port, () =>{
-    db()
-    console.log(`port is listening on port ${port}`)
-})
+const corsOption = {
+  origin: ['*'],
+  credentials: true,
+};
+app.use(cors(corsOption));
+
+app.use("/api/v1", product);
+
+app.listen(PORT, () => {
+  db();
+  console.log(`Listening on port http://localhost:${PORT}`);
+});
 
 
 // Node JS
